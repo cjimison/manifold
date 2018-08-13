@@ -38,6 +38,9 @@ defmodule Manifold do
   def send(pid, message) when is_pid(pid), do: Partitioner.send({current_partitioner(), node(pid)}, [pid], message)
   def send(nil, _message), do: :ok
 
+  @spec cast([pid | nil] | pid | nil, term) :: :ok
+  def cast(pids, message), do: __MODULE__.send(pids, {:"$gen_cast", message})
+
   def set_partitioner_key(key) do
     partitioner = key
     |> Utils.hash()
